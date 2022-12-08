@@ -2,7 +2,7 @@
 //  Cardify.swift
 //  Memorize
 //
-//  Created by Robert Ranf on 7/14/22.
+//  Created by Madison Ranf on 10/14/22.
 //
 
 import SwiftUI
@@ -10,9 +10,10 @@ import SwiftUI
 struct Cardify: ViewModifier {
     var isFaceUp: Bool
     /*
-     This function would be just whatever content is being passed into .cardify, meaning
-     whatever it is that we're modifying. Remember that all .modifier() is doing is returning
-     a View that displays *this*.
+     This function would be just whatever content is being passed into
+     .cardify, meaning whatever it is that we're modifying. Remember that
+     all .modifier() is doing is returninga View that displays *this* (in this
+     case, *this* is the ZStack below.)
      */
     func body(content: Content) -> some View {
         ZStack {
@@ -20,11 +21,11 @@ struct Cardify: ViewModifier {
             if isFaceUp {
                 //
                 shape.fill().foregroundColor(.white)
-                shape.strokeBorder(lineWidth: DrawingGlobals.lineWidth)
-                content
             } else {
                 shape.fill()
             }
+            content
+                .opacity(isFaceUp ? 1 : 0)
         }
     }
 }

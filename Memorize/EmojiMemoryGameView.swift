@@ -3,7 +3,7 @@
 //  View
 //  Memorize
 //
-//  Created by Rob Ranf on 10/5/21.
+//  Created by Madison Ranf on 10/5/22.
 //
 
 import SwiftUI
@@ -53,14 +53,27 @@ struct EmojiMemoryGameView: View {
                         endAngle: Angle(degrees: 110-90))
                     .padding(DrawingGlobals.timerCirclePadding)
                     .opacity(DrawingGlobals.timerCircleOpacity)
-                    Text(card.content).font(font(in: geometry.size))
+                    Text(card.content)
+                        // Using implicit animation to spin the emojis
+                        // when two cards are matched. Need to ensure that
+                        // the animations are positioned directly against
+                        // what we want to animate (in this case the
+                        // change in card.IsMatched on this Text)
+                        .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
+                        .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false))
+                        // Using a static font with scaling to make this
+                        // animatable (.font is not animatable when using
+                        // an auto-scaled font, but scaleEffect is
+                        // animatable)
+                        .font(Font.system(size: DrawingGlobals.fontSize))
+                        .scaleEffect(scale(thatFits: geometry.size))
                 }
                 .cardify(isFaceUp: card.isFaceUp)
             }
         }
-        private func font(in size: CGSize) -> Font {
-            return Font.system(size: min(size.width, size.height)
-                               * DrawingGlobals.fontScale)
+        
+        private func scale(thatFits size: CGSize) -> CGFloat {
+            min(size.width, size.height) / (DrawingGlobals.fontSize / DrawingGlobals.fontScale)
         }
     }
     // MARK: - Preview pane
